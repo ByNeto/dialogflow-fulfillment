@@ -472,12 +472,10 @@ class WebhookClient {
   send_() {
     const requestSource = this.requestSource;
     const messages = this.responseMessages_;
-    console.log('caiu aqui ');
     // If AoG response and the first response isn't a text response,
     // add a empty text response as the first item
     if (requestSource === PLATFORMS.ACTIONS_ON_GOOGLE && messages[0] && !(messages[0] instanceof Text) && !this.existingPayload_(PLATFORMS.ACTIONS_ON_GOOGLE)) {
       this.responseMessages_ = [new Text(' ')].concat(messages);
-      console.log('caiu aqui 0');
     }
 
     // if there is only text, send response
@@ -486,15 +484,12 @@ class WebhookClient {
     const payload = this.existingPayload_(requestSource);
     if (messages.length === 1 && messages[0] instanceof Text) {
       this.client.addTextResponse_();
-      console.log('caiu aqui 1');
     }
     else if (SUPPORTED_RICH_MESSAGE_PLATFORMS.indexOf(this.requestSource) > -1 || SUPPORTED_PLATFORMS.indexOf(this.requestSource) < 0) {
       this.client.addMessagesResponse_(requestSource);
-      console.log('caiu aqui 2');
     }
     if (payload && !payload.sendAsMessage) {
       this.client.addPayloadResponse_(payload, requestSource);
-      console.log('caiu aqui 3');
     }
     this.client.sendResponses_(requestSource);
   }
